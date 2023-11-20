@@ -1,3 +1,11 @@
+-- user_credential table
+CREATE TABLE user_credentials (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    password VARCHAR(255)
+);
+
+
 -- user_profile table
 CREATE TABLE user_profile (
     id INT PRIMARY KEY,
