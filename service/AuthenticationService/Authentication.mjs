@@ -1,43 +1,10 @@
-import dotenv from "dotenv";
-dotenv.config();
-
-import express from "express";
 import mysql from "mysql2";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import authenticationRoutes from "./routes/AuthenticationRoutes.mjs";
-
-// const authenticationRoutes = require("./routes/AuthenticationRoutes.cjs");
-
-const app = express();
-
-app.listen(8081, () => {
-  console.log("Server started at 8081");
-});
-
-app.use(express.json()); //json parsing
-app.use(
-  cors({
-    origin: ["http://localhost:5173"],
-    methods: ["POST", "GET"],
-    credentials: true,
-  })
-); // cors middleware
-app.use(cookieParser());
-
-app.use("/Authentication", authenticationRoutes);
-
-// const salt = 10;
-
-// const db = mysql.createConnection({
-//   host: "localhost",
-//   port: 3306,
-//   user: "root",
-//   password: "password",
-//   database: "test",
-// });
+import supabase from "../../config/supabaseClient.mjs";
+import $ from "jquery";
 
 // const verifyUser = (req, res, next) => {
 //   const token = req.cookies.token;
@@ -64,15 +31,46 @@ app.use("/Authentication", authenticationRoutes);
 //   return res.json({ Status: "Success" });
 // });
 
+const register = async (req, res) => {
+  const { username, password } = req.body;
+
+  console.log(req.body);
+
+  const { data, Error } = await supabase
+    .from("user_profile")
+    .select("username")
+    .eq("username", username);
+
+  if ($.isEmptyObject(data)) {
+    bcrypt.hash("" + password, process.env.SALT, (err, hash) => {
+      if (err) {
+        return res.json({ Error: `Error for hassing password +  ${err}` });
+      }
+      const values = [username, hash];
+
+      db.query(sql, [values], (err, result) => {
+        if (err) {
+          return res.json({ Error: `Insert Error +  ${err}` });
+        }
+        return res.json({ Status: "Success" });
+      });
+    });
+  }
+};
+
 // app.post("/register", (req, res) => {
 //   const { username, password } = req.body;
 
+//   supabase.from("user_profile");
+
 //   const sql = "INSERT INTO user_credentials (`username`,`password`) VALUES (?)";
-//   bcrypt.hash("" + password, salt, (err, hash) => {
+
+//   bcrypt.hash("" + password, process.env.SALT, (err, hash) => {
 //     if (err) {
 //       return res.json({ Error: `Error for hassing password +  ${err}` });
 //     }
 //     const values = [username, hash];
+
 //     db.query(sql, [values], (err, result) => {
 //       if (err) {
 //         return res.json({ Error: `Insert Error +  ${err}` });
@@ -112,3 +110,9 @@ app.use("/Authentication", authenticationRoutes);
 //     }
 //   });
 // });
+
+// app.listen(8081, () => {
+//   console.log("Server started at 8081");
+// });
+
+export default { register };

@@ -1,14 +1,13 @@
--- user_credential table
+-- user_credentials table
 CREATE TABLE user_credentials (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     username VARCHAR(255),
     password VARCHAR(255)
 );
 
-
 -- user_profile table
 CREATE TABLE user_profile (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     preferred_instrument VARCHAR(255),
     username VARCHAR(255),
@@ -19,12 +18,14 @@ CREATE TABLE user_profile (
     created_on DATE NOT NULL,
     created_by INT NOT NULL,
     modified_by INT,
-    modified_on DATE
+    modified_on DATE,
+    FOREIGN KEY (created_by) REFERENCES user_profile(id),
+    FOREIGN KEY (modified_by) REFERENCES user_profile(id)
 );
 
 -- instrument_category table
 CREATE TABLE instrument_category (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(255),
     created_on DATE NOT NULL,
     created_by INT NOT NULL,
@@ -34,10 +35,9 @@ CREATE TABLE instrument_category (
     FOREIGN KEY (modified_by) REFERENCES user_profile(id)
 );
 
-
 -- instruments table
 CREATE TABLE instruments (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(255),
     type VARCHAR(255),
     category INT,
@@ -84,7 +84,7 @@ CREATE TABLE gear_owned (
 
 -- lyrics table
 CREATE TABLE lyrics (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     lyrics TEXT,
     lyrics_with_chords TEXT,
     created_on DATE NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE lyrics (
 
 -- songs table
 CREATE TABLE songs (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(255),
     artist VARCHAR(255),
     tuning VARCHAR(255),
