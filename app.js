@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authenticationRoutes from "./routes/authenticaction.routes.mjs";
 import userRoutes from "./routes/user.routes.mjs";
+import lyricsRoutes from "./routes/lyrics.routes.mjs";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use("/Authentication", authenticationRoutes);
 app.use("/User", userRoutes);
+app.use("/Lyrics", lyricsRoutes);
 
 // const salt = 10;
 
