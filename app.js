@@ -1,15 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
-
 import express from "express";
-import mysql from "mysql2";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import authenticationRoutes from "./routes/AuthenticationRoutes.mjs";
-
-// const authenticationRoutes = require("./routes/AuthenticationRoutes.cjs");
+import authenticationRoutes from "./routes/authenticaction.routes.mjs";
+import userRoutes from "./routes/user.routes.mjs";
 
 const app = express();
 
@@ -28,6 +23,7 @@ app.use(
 app.use(cookieParser());
 
 app.use("/Authentication", authenticationRoutes);
+app.use("/User", userRoutes);
 
 // const salt = 10;
 
