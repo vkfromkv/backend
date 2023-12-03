@@ -27,7 +27,7 @@ class UserRepo {
     try {
       const { data, Error } = await supabase
         .from(tableNames.user_profile)
-        .select("username")
+        .select("*")
         .eq("username", username);
 
       if (!objectHelper.isEmptyObject(Error)) {
@@ -39,7 +39,7 @@ class UserRepo {
       throw e;
     }
   };
-
+// save and create on same method
   CreateUser = async (user) => {
     try {
       if (!ObjectHelper.isEmptyObject(user.username)) {
@@ -49,13 +49,14 @@ class UserRepo {
             errorStatusCodesUtils.CreateFailedException
           );
         }
-
-        if (ObjectHelper.isNullOrEmpty(user.name)) {
-          return responseUtils.StructureMessage(
-            errorMessagesUtils.userCreation.nameRequired,
-            errorStatusCodesUtils.CreateFailedException
-          );
-        }
+        
+        // removecd this will be handled in user_profile page
+        // if (ObjectHelper.isNullOrEmpty(user.name)) {
+        //   return responseUtils.StructureMessage(
+        //     errorMessagesUtils.userCreation.nameRequired,
+        //     errorStatusCodesUtils.CreateFailedException
+        //   );
+        // }
         if (ObjectHelper.isNullOrEmpty(user.username)) {
           return responseUtils.StructureMessage(
             errorMessagesUtils.userCreation.userNameRequired,
