@@ -6,43 +6,33 @@ import errorMessagesUtils from "../utils/errorMessages.utils.mjs";
 import errorStatusCodesUtils from "../utils/errorStatusCodes.utils.mjs";
 import successMessagesUtils from "../utils/successMessages.utils.mjs";
 import successStatusCodesUtils from "../utils/successStatusCodes.utils.mjs";
-import util from 'util';
-const bcryptCompare = util.promisify(bcrypt.compare);
+import util from "util";
 
+const bcryptCompare = util.promisify(bcrypt.compare);
+const jwtVerify = util.promisify(jwt.verify);
 
 const VerifyUser = async (req) => {
   const token = req.cookies.token;
   if (!token) {
-    return {
-      status: responseUtils.StructureMessage(
-        errorMessagesUtils.authentication.UnAuthorised,
-        errorStatusCodesUtils.TokenVerificationException
-      ),
-      isVerified: false,
-    };
+    return responseUtils.StructureMessage(
+      errorMessagesUtils.authentication.UnAuthorised,
+      errorStatusCodesUtils.TokenVerificationException
+    );
   } else {
     // TO DO : Store the secret key in .env and reuse it here.
-    jwt.verify(token, "serverside-secret-key", (err, decoded) => {
-      if (err) {
-        return {
-          status: responseUtils.StructureMessage(
-            errorMessagesUtils.authentication.UnAuthorised,
-            errorStatusCodesUtils.TokenVerificationException
-          ),
-          isVerified: false,
-        };
-      } else {
-        req.username = decoded.username;
-      }
-
-      return {
-        status: responseUtils.StructureMessage(
-          errorMessagesUtils.authentication.UnAuthorised,
-          errorStatusCodesUtils.TokenVerificationException
-        ),
-        isVerified: true,
-      };
-    });
+    try {
+      const decoded = await jwtVerify(token, "serverside-secret-key");
+      return responseUtils.StructureMessage(
+        successMessagesUtils.tokenVerified,
+        successStatusCodesUtils.TokenVerified,
+        decoded.username
+      );
+    } catch (err) {
+      return responseUtils.StructureMessage(
+        errorMessagesUtils.authentication.UnAuthorised,
+        errorStatusCodesUtils.TokenVerificationException
+      );
+    }
   }
 };
 
@@ -51,7 +41,7 @@ const Login = async (req) => {
     const { username, password } = req.body;
     const user = await userRepo.GetUserWithUserName(username);
 
-    if (!await userRepo.CheckIfUserExists(username, user)) {
+    if (!(await userRepo.CheckIfUserExists(username, user))) {
       return responseUtils.StructureMessage(
         errorMessagesUtils.userCreation.userDoesNotExist,
         errorStatusCodesUtils.InvalidCredentialsException

@@ -11,6 +11,7 @@ class ErrorMessages {
   };
 
   authentication = {
+    Authorised: "User Authorised",
     UnAuthorised: "You are not Authorised. Please re-login",
     FailedTokenVerification: "Token Verification Failed",
   };

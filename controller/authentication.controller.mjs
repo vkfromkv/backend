@@ -16,7 +16,7 @@ const Login = async (req, res) => {
 };
 const VerifyUser = async (req, res) => {
   const response = await AuthenticationService.VerifyUser(req);
-  res.status(response.code).send(response.message);
+  res.status(response.code).send(response.data);
 };
 
 const Logout = (req, res) => {
