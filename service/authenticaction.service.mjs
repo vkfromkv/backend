@@ -6,6 +6,9 @@ import errorMessagesUtils from "../utils/errorMessages.utils.mjs";
 import errorStatusCodesUtils from "../utils/errorStatusCodes.utils.mjs";
 import successMessagesUtils from "../utils/successMessages.utils.mjs";
 import successStatusCodesUtils from "../utils/successStatusCodes.utils.mjs";
+import util from 'util';
+const bcryptCompare = util.promisify(bcrypt.compare);
+
 
 const VerifyUser = async (req) => {
   const token = req.cookies.token;
@@ -46,45 +49,31 @@ const VerifyUser = async (req) => {
 const Login = async (req) => {
   try {
     const { username, password } = req.body;
-
     const user = await userRepo.GetUserWithUserName(username);
 
-    if (await userRepo.CheckIfUserExists(username, user)) {
-      bcrypt.compare(password, user.password, (err, response) => {
-        if (err) {
-          return responseUtils.StructureMessage(
-            errorMessagesUtils.userCreation.passwordMatchError,
-            errorStatusCodesUtils.InvalidCredentialsException
-          );
-        }
-        // TO DO : Move the Secret key to the .env File.
-        console.log("I'm here");
-
-        if (response) {
-          const token = jwt.sign({ username }, "serverside-secret-key", {
-            expiresIn: "1d", // TO DO : Move the Expires in to .env file.
-          });
-
-          return responseUtils.StructureMessage(
-            successMessagesUtils.tokenGeneration,
-            successStatusCodesUtils.Accepted,
-            token
-          );
-        } else {
-          return responseUtils.StructureMessage(
-            errorMessagesUtils.userCreation.passwordMatchError,
-            errorStatusCodesUtils.InvalidCredentialsException
-          );
-        }
-      });
-    } else {
+    if (!await userRepo.CheckIfUserExists(username, user)) {
       return responseUtils.StructureMessage(
         errorMessagesUtils.userCreation.userDoesNotExist,
         errorStatusCodesUtils.InvalidCredentialsException
       );
     }
+
+    const isPasswordMatch = await bcryptCompare(password, user[0].password);
+    if (isPasswordMatch) {
+      const token = jwt.sign({ username }, "serverside-secret-key", { expiresIn: "1d" });
+      return responseUtils.StructureMessage(
+        successMessagesUtils.tokenGeneration,
+        successStatusCodesUtils.Accepted,
+        token
+      );
+    } else {
+      return responseUtils.StructureMessage(
+        errorMessagesUtils.userCreation.passwordMatchError,
+        errorStatusCodesUtils.InvalidCredentialsException
+      );
+    }
   } catch (e) {
-    throw e.message;
+    throw new Error(e.message);
   }
 };
 
