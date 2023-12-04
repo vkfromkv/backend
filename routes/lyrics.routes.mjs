@@ -17,5 +17,6 @@ router.get(
 );
 
 router.post("/GetSongsList", controller.GetSongs);
+router.get("/GetTopNSongs", controller.GetTopSongs);
 
 export default router;

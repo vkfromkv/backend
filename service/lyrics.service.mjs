@@ -186,5 +186,15 @@ function GenerateDummyCharacter(length) {
 
   return text;
 }
+
+const GetTopNSongs = async () => {
+  return await songRepo.GetTopNForHomePage();
+};
 //#endregion
-export default { SaveSong, GetDropDownDataForPublication, GetSong, GetSongs };
+export default {
+  SaveSong,
+  GetDropDownDataForPublication,
+  GetSong,
+  GetSongs,
+  GetTopNSongs,
+};

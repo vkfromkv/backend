@@ -26,9 +26,15 @@ const GetSongs = async (req, res) => {
   res.status(200).send(response);
 };
 
+const GetTopSongs = async (req, res) => {
+  const response = await lyricsService.GetTopNSongs(req);
+  res.status(200).send(response);
+};
+
 export default {
   Save,
   GetDropDownDataForPublication,
   GetSong,
   GetSongs,
+  GetTopSongs,
 };

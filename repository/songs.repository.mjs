@@ -57,12 +57,13 @@ const SaveSong = async (item) => {
 
 const GetSong = async (songId) => {
   try {
-    console.log("In the Repo : " + songId);
     let songDetails = await supabase
       .from(tableNames.songs)
       .select()
       .eq("id", songId)
       .single();
+
+    songDetails.hits += 1;
 
     const lyrics = await supabase
       .from(tableNames.lyrics)
@@ -71,6 +72,11 @@ const GetSong = async (songId) => {
       .single();
 
     songDetails.data.lyrics = lyrics.data.lyrics_with_chords;
+
+    supabase
+      .from(tableNames.songs)
+      .update(songDetails)
+      .eq("id", songDetails.id);
 
     return songDetails.data;
   } catch (e) {
@@ -114,13 +120,6 @@ const GetSongList = async (filters) => {
       throw error;
     }
 
-    // Return the list of songs
-
-    // const formattedSongs = data.map((song) => ({
-    //   title: song.title,
-    //   artist: song.artist,
-    //   created_on: formatCreatedOnDate(song.created_on),
-    // }));
     return data;
   } catch (error) {
     console.error("Error:", error);
@@ -128,29 +127,20 @@ const GetSongList = async (filters) => {
   }
 };
 
-async function formatCreatedOnDate(date) {
-  // Check if the date is an object and convert it to a string
-  if (typeof date === "object" && date !== null) {
-    const formattedDate = new Intl.DateTimeFormat("en", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }).format(new Date(date));
+const GetTopNForHomePage = async (n = 10) => {
+  let topHits = await supabase
+    .from("songs")
+    .select("id,title, artist, created_on,hits")
+    .order("hits", { ascending: false })
+    .limit(n);
 
-    // Extract the day suffix (e.g., 'th', 'st', 'nd', 'rd')
-    const daySuffix = formattedDate.match(/\d{1,2}(st|nd|rd|th)/)[0];
+  let recentlyUploaded = await supabase
+    .from("songs")
+    .select("id,title, artist, created_on,hits")
+    .order("created_on", { ascending: false })
+    .limit(n);
 
-    // Replace the day in the formatted date with the day and suffix
-    return formattedDate.replace(/\d{1,2}/, `$&${daySuffix}`);
-  }
+  return { tophits: topHits.data, recentlyUploaded: recentlyUploaded.data };
+};
 
-  // If the date is already a string, return it directly
-  if (typeof date === "string") {
-    return date;
-  }
-
-  // If the date is neither an object nor a string, return an empty string or handle as needed
-  return "";
-}
-
-export default { SaveSong, GetSong, GetSongList };
+export default { SaveSong, GetSong, GetSongList, GetTopNForHomePage };
