@@ -78,7 +78,7 @@ const GetSong = async (songId) => {
 };
 
 const GetSongList = async (filters) => {
-  let query = supabase.from("songs").select("title, artist, created_on");
+  let query = supabase.from("songs").select("id,title, artist, created_on");
 
   if (filters.searchText) {
     query = query.ilike("title", `${filters.searchText}%`);
