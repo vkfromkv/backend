@@ -73,7 +73,7 @@ const GetSong = async (songId) => {
 
     songDetails.data.lyrics = lyrics.data.lyrics_with_chords;
 
-    supabase
+    await supabase
       .from(tableNames.songs)
       .update(songDetails)
       .eq("id", songDetails.id);
