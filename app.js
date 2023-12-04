@@ -7,6 +7,7 @@ import authenticationRoutes from "./routes/authenticaction.routes.mjs";
 import userRoutes from "./routes/user.routes.mjs";
 import lyricsRoutes from "./routes/lyrics.routes.mjs";
 
+
 const app = express();
 
 app.listen(8081, () => {

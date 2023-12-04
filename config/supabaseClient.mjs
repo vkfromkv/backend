@@ -1,9 +1,16 @@
 import { createClient } from "@supabase/supabase-js";
+import dotenv from "dotenv";
+dotenv.config();
 
 // console.log(process.env.NODE_APP_SUPABASE_URL);
-const supabaseUrl = "https://uvowpbczwgkchgpxegqp.supabase.co";
-const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2b3dwYmN6d2drY2hncHhlZ3FwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDExMzMwNjcsImV4cCI6MjAxNjcwOTA2N30.P5tFs7zJi5oesH4C-d53_2cBtD_JxfUlrb0RIhBML1w";
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Supabase URL or Key is missing in .env file');
+  process.exit(1); // Exit the process if these variables are not defined
+}
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default supabase;

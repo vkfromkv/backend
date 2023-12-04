@@ -11,6 +11,8 @@ import util from "util";
 const bcryptCompare = util.promisify(bcrypt.compare);
 const jwtVerify = util.promisify(jwt.verify);
 
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
 const VerifyUser = async (req) => {
   const token = req.cookies.token;
   if (!token) {
@@ -19,9 +21,8 @@ const VerifyUser = async (req) => {
       errorStatusCodesUtils.TokenVerificationException
     );
   } else {
-    // TO DO : Store the secret key in .env and reuse it here.
     try {
-      const decoded = await jwtVerify(token, "serverside-secret-key");
+      const decoded = await jwtVerify(token, jwtSecretKey);
       return responseUtils.StructureMessage(
         successMessagesUtils.tokenVerified,
         successStatusCodesUtils.TokenVerified,
@@ -50,7 +51,7 @@ const Login = async (req) => {
 
     const isPasswordMatch = await bcryptCompare(password, user[0].password);
     if (isPasswordMatch) {
-      const token = jwt.sign({ username }, "serverside-secret-key", { expiresIn: "1d" });
+      const token = jwt.sign({ username }, jwtSecretKey, { expiresIn: "1d" });
       return responseUtils.StructureMessage(
         successMessagesUtils.tokenGeneration,
         successStatusCodesUtils.Accepted,
