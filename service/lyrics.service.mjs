@@ -15,7 +15,7 @@ const SaveSong = async (data) => {
 };
 
 const GetSongs = async (data) => {
-  return await songRepo.GetSongList(filters);
+  return await songRepo.GetSongList(data);
 };
 
 const GetDropDownDataForPublication = () => {
