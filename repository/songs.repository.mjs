@@ -86,7 +86,7 @@ const GetSong = async (songId) => {
 
 const GetSongList = async (filters) => {
   let query = supabase.from("songs").select("id,title, artist, created_on");
-
+  console.log("Thinfs are good : " + filters.timeSignature);
   if (filters.searchText) {
     query = query.ilike("title", `${filters.searchText}%`);
   }

@@ -22,7 +22,8 @@ const GetSong = async (req, res) => {
 };
 
 const GetSongs = async (req, res) => {
-  const response = await lyricsService.GetSongs(req);
+  console.log(req);
+  const response = await lyricsService.GetSongs(req.body);
   res.status(200).send(response);
 };
 
