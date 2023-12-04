@@ -7,11 +7,15 @@ const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.post("/Save", upload.none(), controller.Save);
+router.post("/Save", controller.Save);
+
+router.post("/GetSong", controller.GetSong);
 
 router.get(
   "/GetDropDownDataForPublication",
   controller.GetDropDownDataForPublication
 );
+
+router.post("/GetSongsList", controller.GetSongs);
 
 export default router;

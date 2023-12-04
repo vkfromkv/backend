@@ -1,12 +1,12 @@
 import LyricsService from "../service/lyrics.service.mjs";
 import AuthenticationService from "../service/authenticaction.service.mjs";
+import lyricsService from "../service/lyrics.service.mjs";
 
-const Save = (req, res) => {
-  console.log(req.body);
+const Save = async (req, res) => {
   //   res.send(req);
-  const response = LyricsService.SaveSong(req);
+  const response = await LyricsService.SaveSong(req.body);
 
-  res.send("Ok");
+  res.send(response);
 };
 
 const GetDropDownDataForPublication = (req, res) => {
@@ -16,7 +16,19 @@ const GetDropDownDataForPublication = (req, res) => {
   res.status(200).send(response);
 };
 
+const GetSong = async (req, res) => {
+  const response = await lyricsService.GetSong(req);
+  res.status(200).send(response);
+};
+
+const GetSongs = async (req, res) => {
+  const response = await lyricsService.GetSongs(req);
+  res.status(200).send(response);
+};
+
 export default {
   Save,
   GetDropDownDataForPublication,
+  GetSong,
+  GetSongs,
 };

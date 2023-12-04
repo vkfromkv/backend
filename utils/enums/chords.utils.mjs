@@ -28,10 +28,10 @@ const chordKeysFlatDominated = [
   "B",
 ];
 
-const chordSemiTimeSuffix = ["#", "b"];
+const chordSemiToneSuffix = ["#", "b"];
 
 export default {
   chordKeysFlatDominated,
   chordKeysSharpDominated,
-  chordSemiTimeSuffix,
+  chordSemiToneSuffix,
 };

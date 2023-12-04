@@ -1,7 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 
-console.log("Inside Supabase Client");
-console.log("");
 // console.log(process.env.NODE_APP_SUPABASE_URL);
 const supabaseUrl = "https://uvowpbczwgkchgpxegqp.supabase.co";
 const supabaseKey =
