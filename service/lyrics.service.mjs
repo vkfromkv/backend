@@ -15,18 +15,6 @@ const SaveSong = async (data) => {
 };
 
 const GetSongs = async (data) => {
-  // const filters = {
-  //   searchText: 'Love',
-  //   artist: 'John Doe',
-  //   tuning: 'Standard',
-  //   songKey: 'C', // Replace with your song key
-  //   timeSignature: '4/4', // Replace with your time signature
-  // };
-
-  const filters = {
-    // artist: "Journey",
-  };
-
   return await songRepo.GetSongList(filters);
 };
 

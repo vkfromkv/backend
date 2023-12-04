@@ -37,6 +37,7 @@ const SaveSong = async (item) => {
       lyrics_id: lyricsResponse.data[0].id,
       created_on: new Date(),
       created_by: 2,
+      genre: item.genre,
     };
 
     let songsResponse = await supabase
