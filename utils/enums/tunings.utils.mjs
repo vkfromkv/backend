@@ -7,11 +7,6 @@ const guitarTunings = [
   "Open D Tuning (DADF#AD)",
   "Open E Tuning (EBEG#BE)",
   "Open C Tuning (CGCGCE)",
-  "Double Drop D Tuning (DADGBD)",
-  "Open A Tuning (EAC#EAE)",
-  "Open B Tuning (BD#F#BD#)",
-  "Open C# Tuning (CG#C#G#CE)",
-  "Dobro Open G Tuning (GBDGBD)",
 ];
 
 export default guitarTunings;
