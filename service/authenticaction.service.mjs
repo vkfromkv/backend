@@ -54,7 +54,7 @@ const Login = async (req) => {
       return responseUtils.StructureMessage(
         successMessagesUtils.tokenGeneration,
         successStatusCodesUtils.Accepted,
-        token
+        [token, user[0].id],
       );
     } else {
       return responseUtils.StructureMessage(

@@ -9,10 +9,14 @@ const Login = async (req, res) => {
   console.log("in auth controller");
   console.log(response);
   if (!objectHelper.isNullOrEmpty(response.data)) {
-    res.cookie("token", response.data);
+    res.cookie("token", response.data[0]);
   }
 
-  res.status(response.code).send(response.message);
+  res.json({
+    status: response.code,
+    message: response.message,
+    userId: response.data[1],
+  });
 };
 const VerifyUser = async (req, res) => {
   const response = await AuthenticationService.VerifyUser(req);
