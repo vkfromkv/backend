@@ -27,10 +27,16 @@ const register = async (req, res) => {
   });
 };
 
+
+const updateUserProfile = async (req, res) => {
+  console.log(req.body);
+  return await UserRepo.UpdateUserProfile(req.body);
+};
+
 //TO DO:
 /*
     1. User Update
     2. User Delete
 */
 
-export default { register };
+export default { register, updateUserProfile };

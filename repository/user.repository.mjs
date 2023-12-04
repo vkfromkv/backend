@@ -113,6 +113,65 @@ class UserRepo {
       );
     }
   };
+
+  UpdateUserProfile = async (user) => {
+    try {
+      if (!ObjectHelper.isEmptyObject(user.username)) {
+        if (!await this.CheckIfUserExists(user.username)) {
+          return responseUtils.StructureMessage(
+            errorMessagesUtils.userCreation.userDoesNotExist,
+            errorStatusCodesUtils.UpdateFailedException
+          );
+        }
+
+        if (ObjectHelper.isNullOrEmpty(user.username)) {
+          return responseUtils.StructureMessage(
+            errorMessagesUtils.userCreation.userNameRequired,
+            errorStatusCodesUtils.CreateFailedException
+          );
+        }
+
+        const updateUser = {
+          name: user.name,
+          preferred_instrument: user.preferred_instrument,
+          username: user.username,
+          city: user.city,
+          country: user.country,
+          is_artist: user.is_artist,
+          created_on: new Date(), // You can set a default value or leave it as is
+          created_by: 2, // You can set a default value or leave it as is
+          modified_by: 2,
+          modified_on: new Date(),
+        };
+
+        const { data, error } = await supabase
+          .from(tableNames.user_profile)
+          .update(updateUser)
+          .match({ username: user.username });
+
+        if (!ObjectHelper.isEmptyObject(error)) {
+          console.log(data + "    " + error.message);
+        }
+        console.log("Operation Complete");
+
+        return responseUtils.StructureMessage(
+          SuccessMessages.created,
+          SuccessStatusCodes.Created
+        );
+      } else {
+        return responseUtils.StructureMessage(
+          errorMessagesUtils.userCreation.objectNull,
+          errorStatusCodesUtils.CreateFailedException
+        );
+      }
+    } catch (e) {
+      console.log("inside catch");
+      return responseUtils.StructureMessage(
+        e.message,
+        errorStatusCodesUtils.CreateFailedException
+      );
+    }
+  };
 }
 
 export default new UserRepo();
