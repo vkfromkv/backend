@@ -111,6 +111,14 @@ const GetSongList = async (filters) => {
     query = query.filter("published_by", "eq", filters.userId);
   }
 
+  if (filters.capo) {
+    query = query.filter("capo_position", "eq", filters.capo);
+  }
+
+  if (filters.genre) {
+    query = query.filter("genre", "eq", filters.genre);
+  }
+
   try {
     // Execute the Supabase query
     const { data, error } = await query;
