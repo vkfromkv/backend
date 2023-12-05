@@ -22,7 +22,9 @@ app.use(
   })
 ); // cors middleware
 app.use(cookieParser());
-
+app.get("/", (req, res) => {
+  res.send("Hey this is my API running 🥳");
+});
 app.use("/Authentication", authenticationRoutes);
 app.use("/User", userRoutes);
 app.use("/Lyrics", lyricsRoutes);
