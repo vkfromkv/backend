@@ -1,0 +1,25 @@
+{
+  "version": 2,
+
+  "builds": [
+    {
+      "src": "./app.js",
+
+      "use": "@vercel/node"
+    }
+  ],
+
+  "routes": [
+    {
+      "src": "/(.*)",
+
+      "dest": "/",
+
+      "methods": ["GET", "POST"],
+
+      "headers": {
+        "Access-Control-Allow-Origin": "https://frontend-blue-six.vercel.app/"
+      }
+    }
+  ]
+}
