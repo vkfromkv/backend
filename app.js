@@ -16,7 +16,7 @@ app.listen(8081, () => {
 app.use(express.json()); //json parsing
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173","https://frontend-blue-six.vercel.app"],
     methods: ["POST", "GET"],
     credentials: true,
   })
